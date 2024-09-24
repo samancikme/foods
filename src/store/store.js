@@ -6,6 +6,7 @@ export const initialState = {
   basketFood: JSON.parse(localStorage.getItem("basket")),
   modalAlert: false,
   mode: localStorage.getItem("theme") ? false : true, // !false === dark  ;;; true === light
+  amount : null, 
 };
 
 export const reducer = (state, action) => {
@@ -40,6 +41,16 @@ export const reducer = (state, action) => {
       return {
         ...state,
         basketFood: JSON.parse(localStorage.getItem("basket")),
+      };
+    case "SET_AMOUNT_ADD":
+      return {
+        ...state,
+        amount: state.amount + action.payload,
+      };
+    case "SET_AMOUNT_DIS":
+      return {
+        ...state,
+        amount: state.amount - action.payload,
       };
     default:
       return state;

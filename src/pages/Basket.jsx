@@ -13,8 +13,21 @@ const Basket = () => {
     }))
   )
 
+  useEffect(() => {
+    dispatch({ type: "SET_AMOUNT_ADD", payload: basketItems.length *5.5 /2 })
+  }, [])
+
+
+  console.log(basketItems.length)
+
+  console.log(state)
 
   const updateItemQuantity = (itemId, operation) => {
+    if (operation === "increase") {
+      dispatch({ type: "SET_AMOUNT_ADD", payload: 5.5 })
+    } else if (operation === "decrease") {
+      dispatch({ type: "SET_AMOUNT_DIS", payload: 5.5 })
+    }
     setBasketItems((prevItems) =>
       prevItems?.map((item) => {
         if (item?.idMeal === itemId) {
@@ -33,10 +46,12 @@ const Basket = () => {
             price: 5.5 * newQuantity,
           }
         }
+        console.log(item)
         return item
       })
     )
   }
+
 
   useEffect(() => {
     const itemsToRemove = basketItems?.filter((item) => item.toRemove)
@@ -129,6 +144,25 @@ const Basket = () => {
             ))}
           </div>
         )}
+      </div>
+      <div className="">
+        <div className="">
+          <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200 mb-5 ">
+            Checkout
+          </div>
+          <div className="flex justify-between items-center gap-3">
+            <div className="text-[16px] dark:text-white font-semibold">
+              Subtotal: 
+              <div className="w-5 gap-2 flex ">
+                {state.amount} <span className="text-orange-300"> $ </span>
+              </div>
+            </div>
+            <div className="text-[16px] dark:text-white font-semibold">
+              Delivery: 
+              <div className="w-5 flex gap-2" >5.00 <span className="text-orange-300"> $ </span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
