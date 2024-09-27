@@ -1,21 +1,37 @@
 import { AiFillHeart } from "react-icons/ai"
 import { AiOutlineHeart } from "react-icons/ai"
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { MainContext } from "../store/context"
-import { Navigate, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const FoodCard = ({ item, path }) => {
   const { state, dispatch } = useContext(MainContext)
+
+  useEffect(() => {
+    if(!JSON.parse(localStorage.getItem('basket'))){
+      localStorage.setItem('basket', JSON.stringify([]))
+    }
+  }, [])
+
+
 
   const [loading, setLoading] = useState(true)
 
   const addBasket = (item) => {
     const basket = JSON.parse(localStorage.getItem('basket')) || []
-    const newBasketItem = state.foodData.meals?.find(
+    const newBasketItem = state?.foodData?.meals?.find(
       (food) => food.idMeal === item.idMeal
     )
     if (!basket.find((food) => food?.idMeal === item?.idMeal)) {
-      const basketData = [...basket, newBasketItem]
+      const basketData = [
+        ...basket,
+        {
+          ...newBasketItem,
+          price: 5.5,
+          quantity: 1,
+          total : 5.5
+        }
+      ]
       localStorage.setItem('basket', JSON.stringify(basketData))
       dispatch({ type: 'REMOVE_BASKET' })
     }
@@ -56,7 +72,7 @@ const FoodCard = ({ item, path }) => {
       <div className="flex justify-center flex-col gap-3 flex-1">
         <div className="">
           {loading && (
-            <div className="flex justify-center items-center h-[200px]">
+            <div className="flex justify-center dark:text-white items-center h-[300px]">
               Loading...
             </div>
           )}

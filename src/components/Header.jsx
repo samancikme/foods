@@ -7,6 +7,7 @@ import Container from './Container';
 import { MainContext } from "../store/context";
 import { Link, useLocation } from "react-router-dom";
 import { btns } from "../store/consts";
+import logo from '../images/logo.png'
 
 const Header = () => {
 
@@ -29,7 +30,7 @@ const Header = () => {
           <Link className="sm:flex hidden w-[100%] ss:w-[30%] mm:justify-start  justify-center items-center" to={'/'}>
             <img
               className="w-[120px] h-[60px] object-contain"
-              src="https://meals-react-js-henna.vercel.app/assets/logo-EuJLY3Mp.png"
+              src={logo}
               alt="logo" />
           </Link>
           <div

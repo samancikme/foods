@@ -3,6 +3,8 @@ import React, { useContext } from 'react'
 import { MainContext } from '../store/context'
 import FoodCard from '../components/FoodCard'
 import { Link } from "react-router-dom";
+import img from '../images/home.png'
+import Loader from "../components/Loader";
 
 const Home = () => {
 
@@ -24,19 +26,25 @@ const Home = () => {
           </div>
         </div>
         <div className="md:flex-1 w-full flex md:justify-end justify-center">
-          <img className=' translate-x-[-15px]' src="https://meals-react-js-henna.vercel.app/assets/home-bg-C7vO4ymH.png" alt="" />
+          <img className=' translate-x-[-15px]' src={img} alt="" />
         </div>
       </div>
       <div className=" flex flex-col gap-5">
         <div className="text-[30px] text-center text-orange-500 font-semibold border-b-2 border-orange-300 ">
           Menu
         </div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
-          {state.foodData.meals?.slice(0, 8).map(element => {
-            return (
-              <FoodCard key={element.idMeal} item={element} />
-            )
-          })}
+        <div className="">
+          {state.loading ?
+            <Loader />
+            :
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
+              {state.foodData.meals?.slice(0, 8).map(element => {
+                return (
+                  <FoodCard key={element.idMeal} item={element} />
+                )
+              })}
+            </div>}
+
         </div>
         <div className=" flex justify-center items-center">
           <Link to={'/menu'}>

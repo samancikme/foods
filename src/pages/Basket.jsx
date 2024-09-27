@@ -1,91 +1,89 @@
-import React, { useContext, useState, useEffect } from "react"
+import { BiChevronUp } from "react-icons/bi"; 
+import { BiChevronDown } from "react-icons/bi";
+import React, { useContext, useState, useEffect, useRef } from "react"
 import { MainContext } from "../store/context"
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
 
 const Basket = () => {
+
+
   const { state, dispatch } = useContext(MainContext)
 
-  const [basketItems, setBasketItems] = useState(() =>
-    state.basketFood?.map((item) => ({
-      ...item,
-      price: 5.5,
-      quantity: 1,
-    }))
-  )
+  const [basketItems, setBasketItems] = useState(() => {
+    const storedBasket = localStorage.getItem("basket")
+    return storedBasket
+      ? JSON.parse(storedBasket)
+      : state.basketFood?.map((item) => ({
+        ...item,
+        price: 5.5,
+        quantity: 1,
+        total: 5.5,
+      })) || []
+  })
+
+  const [checkAct , setCheckAct] = useState(false) 
+
+  const calculateSubtotal = (items) => {
+    return items.reduce((acc, item) => acc + item.total, 0)
+  }
 
   useEffect(() => {
-    dispatch({ type: "SET_AMOUNT_ADD", payload: basketItems.length *5.5 /2 })
-  }, [])
+    localStorage.setItem("basket", JSON.stringify(basketItems))
 
-
-  console.log(basketItems.length)
-
-  console.log(state)
+    const subtotal = calculateSubtotal(basketItems)
+    dispatch({ type: "SET_AMOUNT", payload: subtotal })
+  }, [basketItems, dispatch])
 
   const updateItemQuantity = (itemId, operation) => {
-    if (operation === "increase") {
-      dispatch({ type: "SET_AMOUNT_ADD", payload: 5.5 })
-    } else if (operation === "decrease") {
-      dispatch({ type: "SET_AMOUNT_DIS", payload: 5.5 })
-    }
     setBasketItems((prevItems) =>
-      prevItems?.map((item) => {
-        if (item?.idMeal === itemId) {
-          let newQuantity =
-            operation === "increase"
-              ? item.quantity + 1
-              : item.quantity - 1
+      prevItems
+        ?.map((item) => {
+          if (item?.idMeal === itemId) {
+            let newQuantity =
+              operation === "increase" ? item.quantity + 1 : item.quantity - 1
 
-          if (newQuantity < 1) {
-            return { ...item, toRemove: true }
-          }
+            if (newQuantity < 1) {
+              removeBasket(item)
+              return null
+            }
 
-          return {
-            ...item,
-            quantity: newQuantity,
-            price: 5.5 * newQuantity,
+            return {
+              ...item,
+              quantity: newQuantity,
+              total: item.price * newQuantity,
+            }
           }
-        }
-        console.log(item)
-        return item
-      })
+          return item
+        })
+        .filter(Boolean)
     )
   }
 
 
-  useEffect(() => {
-    const itemsToRemove = basketItems?.filter((item) => item.toRemove)
-    if (itemsToRemove?.length > 0) {
-      itemsToRemove?.forEach((item) => removeBasket(item))
-      setBasketItems((prevItems) =>
-        prevItems.filter((item) => !item.toRemove)
-      )
-    }
-  }, [basketItems])
-
   const removeBasket = (item) => {
     const basket = JSON.parse(localStorage.getItem("basket")) || []
-    const basketData = basket.filter((food) => food?.idMeal !== item?.idMeal)
+    const basketData = basket.filter((food) => food.idMeal !== item.idMeal)
     localStorage.setItem("basket", JSON.stringify(basketData))
-    dispatch({ type: "REMOVE_BASKET" })
+    setBasketItems(basketData)
+    dispatch({ type: "SET_AMOUNT", payload: calculateSubtotal(basketData) })
   }
 
   return (
     <div>
-      <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200 mb-5 ">
+      <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200  mb-10 ">
         Basket
       </div>
       <div>
         {basketItems?.length <= 0 ? (
-          <div className="flex justify-center items-center min-h-[calc(100vh-210px)] sm:text-[28px] text-[20px] dark:text-white font-semibold">
+          <div className="flex justify-center items-start min-h-[calc(100vh-250px)] sm:text-[26px] text-[20px] dark:text-white font-semibold">
             <div>Basket is empty</div>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 pb-[150px]">
             {basketItems?.map((item) => (
               <div
                 key={item?.idMeal}
-                className={`relative border-[1px] rounded-xl shadow-2xl sm:flex-row flex-col p-3 flex justify-between gap-3 `}>
+                className="relative border-[1px] rounded-xl shadow-2xl sm:flex-row flex-col p-3 flex justify-between gap-3"
+              >
                 <div className="flex justify-between items-center sm:flex-row flex-col gap-3">
                   <div className="relative">
                     <img
@@ -93,19 +91,6 @@ const Basket = () => {
                       src={item?.strMealThumb}
                       alt={item?.strMeal}
                     />
-                    <div className="absolute top-[-10px] right-[-40px]">
-                      <button
-                        onClick={() => addFavourite(item)}
-                        className="text-[28px] rounded-full font-semibold duration-500 w-[40px] h-[40px] text-red-500 flex justify-center items-center">
-                        {state.favFood?.find(
-                          (food) => food.idMeal === item.idMeal
-                        ) ? (
-                          <AiFillHeart />
-                        ) : (
-                          <AiOutlineHeart />
-                        )}
-                      </button>
-                    </div>
                   </div>
                   <div className="flex justify-start items-start">
                     <h2 className="text-[16px] dark:text-white font-bold py-2">
@@ -116,7 +101,7 @@ const Basket = () => {
                 <div className="flex justify-between items-center px-2 gap-[50px] duration-500">
                   <div className="flex justify-center items-center text-[16px] dark:text-white font-medium gap-1">
                     Total: <span className="text-orange-300"> $ </span>
-                    <div className="w-5">{item.price.toFixed(2)}</div>
+                    <div className="w-5">{item.total?.toFixed(2)}</div>
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="flex justify-between items-center gap-4">
@@ -124,7 +109,8 @@ const Basket = () => {
                         onClick={() =>
                           updateItemQuantity(item.idMeal, "decrease")
                         }
-                        className="w-[25px] h-[25px] text-[22px] dark:text-white flex justify-center items-center rounded-md dark:bg-gray-500 bg-gray-300">
+                        className="w-[25px] h-[25px] text-[22px] dark:text-white flex justify-center items-center rounded-md dark:bg-gray-500 bg-gray-300"
+                      >
                         -
                       </button>
                       <div className="text-[16px] dark:text-white font-semibold w-5">
@@ -134,7 +120,8 @@ const Basket = () => {
                         onClick={() =>
                           updateItemQuantity(item.idMeal, "increase")
                         }
-                        className="w-[25px] h-[25px] text-[22px] dark:text-white flex justify-center items-center rounded-md dark:bg-gray-500 bg-gray-300">
+                        className="w-[25px] h-[25px] text-[22px] dark:text-white flex justify-center items-center rounded-md dark:bg-gray-500 bg-gray-300"
+                      >
                         +
                       </button>
                     </div>
@@ -145,21 +132,48 @@ const Basket = () => {
           </div>
         )}
       </div>
-      <div className="">
-        <div className="">
-          <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200 mb-5 ">
+      <div  className={`${checkAct? " translate-y-0" : " sm:translate-y-[205px] translate-y-[195px]"} duration-500 fixed left-0 right-0 sm:bottom-0 bottom-10 w-full sm:px-20 px-5 dark:bg-slate-800 bg-slate-200 sm:pb-6 pb-10`}>
+        <div className="flex flex-col gap-4 relative">
+          <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200 mb-5">
             Checkout
           </div>
-          <div className="flex justify-between items-center gap-3">
-            <div className="text-[16px] dark:text-white font-semibold">
-              Subtotal: 
-              <div className="w-5 gap-2 flex ">
-                {state.amount} <span className="text-orange-300"> $ </span>
+          <div 
+          onClick={() => setCheckAct(!checkAct)}
+          className=" absolute top-2 right-[-10px] dark:text-white text-[24px] duration-500 hover:border-opacity-100 border-opacity-0 dark:border-gray-300 active:scale-95  border-2 cursor-pointer rounded-full ">
+            {checkAct? <BiChevronDown /> : <BiChevronUp />}
+          </div>
+          <div className="flex justify-center items-start gap-2 flex-col">
+            <div className="text-[16px]  w-full justify-between pr-10 dark:text-white font-semibold flex gap-2">
+              Subtotal:
+              <span className="flex-grow border-dotted border-b-2 border-gray-500 mx-1 relative top-[-6px]"></span>
+              <div className="w-5 gap-2 flex">
+                {state.amount !== null ? state.amount.toFixed(2) : "0.00"}
+                <span className="text-orange-300"> $ </span>
               </div>
             </div>
-            <div className="text-[16px] dark:text-white font-semibold">
-              Delivery: 
-              <div className="w-5 flex gap-2" >5.00 <span className="text-orange-300"> $ </span></div>
+            <div className="text-[16px] w-full justify-between pr-10 dark:text-white font-semibold flex gap-2 ">
+              Delivery:
+              <span className="flex-grow border-dotted border-b-2 border-gray-500 mx-1 relative top-[-6px]"></span>
+              <div className="w-5 flex gap-2">
+                5.00 <span className="text-orange-300"> $ </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <div className="flex flex-col gap-3">
+              <div className="dark:text-white flex justify-between text-[20px] font-bold gap-3">
+                <span>Total: </span>
+                {!basketItems?.length <= 0 ? 
+                <div className="">
+                  {state.amount !== null
+                    ? (parseFloat(state.amount.toFixed(2)) + 5.00).toFixed(2)
+                    : "5.00"}
+                </div> : "0.00"}
+                <span className="text-orange-300"> $ </span>
+              </div>
+              <button className="text-[14px] font-bold px-5 min-w-[120px] hover:bg-blue-300 active:scale-95 duration-300 py-2 rounded-xl bg-blue-200">
+                Order
+              </button>
             </div>
           </div>
         </div>
