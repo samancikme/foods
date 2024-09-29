@@ -17,10 +17,6 @@ const MainLayout = () => {
   }
 
 
-  console.log(localStorage.getItem("theme"))
-  console.log(state.mode)
-
-
 
   useEffect(() => {
     if (state.mode) {
@@ -44,7 +40,7 @@ const MainLayout = () => {
       <div className=' sticky top-0 z-20 shadow-md' >
         <Header />
       </div>
-      <div className='dark:bg-[#1a202c] bg-[#f4f4f4] duration-500 sm:min-h-[calc(100vh-83px)] min-h-[calc(100vh-200px)] flex  max-h-max py-5 sm:pb-10 pb-[100px]'>
+      <div className='dark:bg-[#1a202c] bg-[#faf9f9] duration-500 sm:min-h-[calc(100vh-83px)] min-h-[calc(100vh-200px)] flex  max-h-max py-5 sm:pb-10 pb-[100px]'>
         <Container>
           <Outlet />
         </Container>

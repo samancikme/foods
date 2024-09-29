@@ -6,7 +6,7 @@ export const initialState = {
   basketFood: JSON.parse(localStorage.getItem("basket")) || [],
   modalAlert: false,
   mode: JSON.parse(localStorage.getItem("theme")) ?? true, 
-  amount: 0,
+  amount: JSON.parse(localStorage.getItem("amount")) ?? 0,
 };
 
 export const reducer = (state, action) => {
@@ -43,18 +43,13 @@ export const reducer = (state, action) => {
         ...state,
         basketFood: JSON.parse(localStorage.getItem("basket")),
       };
-    case "SET_AMOUNT":
-      const totalAmount = state.basketFood?.length
-        ? state.basketFood.reduce(
-            (acc, item) => acc + (item.price * item.quantity || 0),
-            0
-          )
-        : 0;
-      localStorage.setItem("amount", JSON.stringify(totalAmount));
-      return {
-        ...state,
-        amount: totalAmount,
-      };
+      case "SET_AMOUNT":
+        const totalAmount = action.payload; // dispatch orqali yuborilgan payload'dan foydalanamiz
+        localStorage.setItem("amount", JSON.stringify(totalAmount));
+        return {
+          ...state,
+          amount: totalAmount,
+        };
     default:
       return state;
   }

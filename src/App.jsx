@@ -8,10 +8,11 @@ import { initialState, reducer } from './store/store'
 import { MainContext } from './store/context'
 import Home from './pages/Home'
 import { getAllData } from './api/request'
+import NotFound from './pages/NotFound'
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const url = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood'
+  const url = 'https://foods-database.onrender.com/meals'
 
   useEffect(() => {
     getAllData(url, dispatch)
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/basket' element={<Basket />} />
         <Route path='/menu' element={<Menu />} />
         <Route path='/favourites' element={<Favourites />} />
+        <Route path='/*' element={<NotFound />} />
       </Route>
     )
   )

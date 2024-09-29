@@ -18,7 +18,7 @@ const Menu = () => {
         {state.loading ? <Loader />
           :
           <div className='grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3'>
-            {state.foodData?.meals?.map(item => {
+            {state.foodData?.map(item => {
               return (
                 <FoodCard key={item.idMeal} item={item} />
               )

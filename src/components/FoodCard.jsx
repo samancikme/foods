@@ -19,7 +19,7 @@ const FoodCard = ({ item, path }) => {
 
   const addBasket = (item) => {
     const basket = JSON.parse(localStorage.getItem('basket')) || []
-    const newBasketItem = state?.foodData?.meals?.find(
+    const newBasketItem = state?.foodData?.find(
       (food) => food.idMeal === item.idMeal
     )
     if (!basket.find((food) => food?.idMeal === item?.idMeal)) {
@@ -51,7 +51,7 @@ const FoodCard = ({ item, path }) => {
 
   const addFavourite = (item) => {
     const favourite = JSON.parse(localStorage.getItem('favourite')) || []
-    const newfavItem = state.foodData.meals?.find(
+    const newfavItem = state.foodData?.find(
       (food) => food.idMeal === item.idMeal
     )
     if (!favourite.find((food) => food.idMeal === item.idMeal)) {
@@ -68,7 +68,7 @@ const FoodCard = ({ item, path }) => {
   }
 
   return (
-    <div className="relative border-[1px] rounded-xl shadow-2xl p-3 flex flex-col gap-3">
+    <div className="relative border-[1px] rounded-xl shadow-sm dark:bg-[#312a2aa2] p-3 flex flex-col gap-3">
       <div className="flex justify-center flex-col gap-3 flex-1">
         <div className="">
           {loading && (

@@ -1,5 +1,5 @@
-import { BiChevronUp } from "react-icons/bi"; 
-import { BiChevronDown } from "react-icons/bi";
+import { BiChevronUp } from "react-icons/bi"
+import { BiChevronDown } from "react-icons/bi"
 import React, { useContext, useState, useEffect, useRef } from "react"
 import { MainContext } from "../store/context"
 
@@ -7,7 +7,6 @@ const Basket = () => {
 
 
   const { state, dispatch } = useContext(MainContext)
-
   const [basketItems, setBasketItems] = useState(() => {
     const storedBasket = localStorage.getItem("basket")
     return storedBasket
@@ -20,7 +19,7 @@ const Basket = () => {
       })) || []
   })
 
-  const [checkAct , setCheckAct] = useState(false) 
+  const [checkAct, setCheckAct] = useState(false)
 
   const calculateSubtotal = (items) => {
     return items.reduce((acc, item) => acc + item.total, 0)
@@ -28,8 +27,8 @@ const Basket = () => {
 
   useEffect(() => {
     localStorage.setItem("basket", JSON.stringify(basketItems))
-
     const subtotal = calculateSubtotal(basketItems)
+
     dispatch({ type: "SET_AMOUNT", payload: subtotal })
   }, [basketItems, dispatch])
 
@@ -58,18 +57,16 @@ const Basket = () => {
     )
   }
 
-
   const removeBasket = (item) => {
     const basket = JSON.parse(localStorage.getItem("basket")) || []
     const basketData = basket.filter((food) => food.idMeal !== item.idMeal)
-    localStorage.setItem("basket", JSON.stringify(basketData))
     setBasketItems(basketData)
-    dispatch({ type: "SET_AMOUNT", payload: calculateSubtotal(basketData) })
   }
 
+
   return (
-    <div>
-      <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200  mb-10 ">
+    <div >
+      <div className="text-[30px] font-bold text-orange-400  text-center border-b-2 border-orange-200  mb-10 ">
         Basket
       </div>
       <div>
@@ -82,7 +79,7 @@ const Basket = () => {
             {basketItems?.map((item) => (
               <div
                 key={item?.idMeal}
-                className="relative border-[1px] rounded-xl shadow-2xl sm:flex-row flex-col p-3 flex justify-between gap-3"
+                className="relative border-[1px] border-[#fffff0] rounded-xl dark:bg-transparent bg-[#dfdfdf43] sm:flex-row flex-col p-3 flex justify-between gap-3"
               >
                 <div className="flex justify-between items-center sm:flex-row flex-col gap-3">
                   <div className="relative">
@@ -132,15 +129,15 @@ const Basket = () => {
           </div>
         )}
       </div>
-      <div  className={`${checkAct? " translate-y-0" : " sm:translate-y-[205px] translate-y-[195px]"} duration-500 fixed left-0 right-0 sm:bottom-0 bottom-10 w-full sm:px-20 px-5 dark:bg-slate-800 bg-slate-200 sm:pb-6 pb-10`}>
+      <div className={`${checkAct ? " translate-y-0" : " sm:translate-y-[205px] translate-y-[195px]"} duration-500 fixed left-0 right-0 sm:bottom-0 bottom-10 w-full sm:px-20 px-5 dark:bg-slate-800 bg-[#faf9f6] shadow-sm sm:pb-6 pb-10`}>
         <div className="flex flex-col gap-4 relative">
           <div className="text-[30px] font-bold text-orange-400 text-center border-b-2 border-orange-200 mb-5">
             Checkout
           </div>
-          <div 
-          onClick={() => setCheckAct(!checkAct)}
-          className=" absolute top-2 right-[-10px] dark:text-white text-[24px] duration-500 hover:border-opacity-100 border-opacity-0 dark:border-gray-300 active:scale-95  border-2 cursor-pointer rounded-full ">
-            {checkAct? <BiChevronDown /> : <BiChevronUp />}
+          <div
+            onClick={() => setCheckAct(!checkAct)}
+            className=" absolute top-2 right-[-10px] dark:text-white text-[24px] duration-500 hover:border-opacity-100 border-opacity-0 dark:border-gray-300 active:scale-95  border-2 cursor-pointer rounded-full ">
+            {checkAct ? <BiChevronDown /> : <BiChevronUp />}
           </div>
           <div className="flex justify-center items-start gap-2 flex-col">
             <div className="text-[16px]  w-full justify-between pr-10 dark:text-white font-semibold flex gap-2">
@@ -163,12 +160,12 @@ const Basket = () => {
             <div className="flex flex-col gap-3">
               <div className="dark:text-white flex justify-between text-[20px] font-bold gap-3">
                 <span>Total: </span>
-                {!basketItems?.length <= 0 ? 
-                <div className="">
-                  {state.amount !== null
-                    ? (parseFloat(state.amount.toFixed(2)) + 5.00).toFixed(2)
-                    : "5.00"}
-                </div> : "0.00"}
+                {!basketItems?.length <= 0 ?
+                  <div className="">
+                    {state.amount !== null
+                      ? (parseFloat(state.amount.toFixed(2)) + 5.00).toFixed(2)
+                      : "5.00"}
+                  </div> : "0.00"}
                 <span className="text-orange-300"> $ </span>
               </div>
               <button className="text-[14px] font-bold px-5 min-w-[120px] hover:bg-blue-300 active:scale-95 duration-300 py-2 rounded-xl bg-blue-200">

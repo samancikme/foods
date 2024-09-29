@@ -24,7 +24,7 @@ const Header = () => {
 
 
   return (
-    <div className="dark:bg-[#171923] bg-[#f2f2f2] py-3 duration-500 z-10 sm:relative w-full fixed bottom-0">
+    <div className="dark:bg-[#171923] bg-[#faf9f6] py-3 duration-500 z-10 sm:relative w-full fixed bottom-0">
       <Container>
         <div className="flex justify-between items-center gap-3 sm:flex-row flex-col">
           <Link className="sm:flex hidden w-[100%] ss:w-[30%] mm:justify-start  justify-center items-center" to={'/'}>
@@ -35,14 +35,14 @@ const Header = () => {
           </Link>
           <div
             className=" flex justify-between sm:w-[60%] lg:w-[40%] ss:flex-1 w-[100%]  items-center">
-            <button
+            {/* <button
               onClick={() => {
                 dispatch({ type: 'TOGGLE_MODAL_ALERT' })
               }}
               className="hidden flex-col justify-center items-center sm:flex">
               <div className="text-[24px] text-black dark:text-white"><CgSearch /></div>
               <div className="text-[14px] font-medium text-black dark:text-white">Search</div>
-            </button>
+            </button> */}
             {btns.map(btn => {
               const actBtn = pathname === btn.path ? true : false
               const Icon = btn.icon
@@ -64,7 +64,7 @@ const Header = () => {
               onClick={() => {
                 dispatch({ type: 'TOGGLE_MODE' })
               }}
-              className="sm:flex hidden flex-col justify-center items-center">
+              className="flex flex-col justify-center items-center">
               <div className={` ${state.mode ? "text-blue-400" : "text-yellow-200 "} text-[24px] justify-center items-center flex  rounded-md `}>
                 {!state.mode ? <BiSun /> : <BiMoon />}
               </div>

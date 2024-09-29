@@ -10,6 +10,8 @@ const Home = () => {
 
   const { state } = useContext(MainContext)
 
+  console.log(state.foodData)
+
   return (
     <div>
       <div className="flex justify-between items-center md:flex-row flex-col  py-[50px] gap-4" >
@@ -20,9 +22,11 @@ const Home = () => {
           </h1>
           <p className="dark:text-white text-[16px] font-medium">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo, sed proin amet a vestibulum enim volutpat lacus. Volutpat arcu sit sed tortor etiam volutpat ipsum.</p>
           <div className="">
-            <button className='px-5 mt-5 py-3 bg-teal-300 rounded-xl font-medium hover:bg-teal-400 active:scale-95 duration-500'>
-              Order now
-            </button>
+            <Link to={'/basket'}>
+              <button className='px-5 mt-5 py-3 bg-teal-300 rounded-xl font-medium hover:bg-teal-400 active:scale-95 duration-500'>
+                Order now
+              </button>
+            </Link>
           </div>
         </div>
         <div className="md:flex-1 w-full flex md:justify-end justify-center">
@@ -38,7 +42,7 @@ const Home = () => {
             <Loader />
             :
             <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
-              {state.foodData.meals?.slice(0, 8).map(element => {
+              {state.foodData?.slice(0, 8).map(element => {
                 return (
                   <FoodCard key={element.idMeal} item={element} />
                 )
