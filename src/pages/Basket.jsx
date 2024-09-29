@@ -7,6 +7,7 @@ const Basket = () => {
 
 
   const { state, dispatch } = useContext(MainContext)
+  const [loading, setLoading] = useState(true)
   const [basketItems, setBasketItems] = useState(() => {
     const storedBasket = localStorage.getItem("basket")
     return storedBasket
@@ -82,11 +83,17 @@ const Basket = () => {
                 className="relative border-[1px] border-[#fffff0] rounded-xl dark:bg-transparent bg-[#dfdfdf43] sm:flex-row flex-col p-3 flex justify-between gap-3"
               >
                 <div className="flex justify-between items-center sm:flex-row flex-col gap-3">
-                  <div className="relative">
+                  <div className=" relative">
+                    {loading && (
+                      <div className="flex justify-center dark:text-white items-center h-[300px]">
+                        Loading...
+                      </div>
+                    )}
                     <img
                       className="w-[150px] h-[150px] object-contain rounded-xl border-[1px] border-gray-400 shadow-md"
                       src={item?.strMealThumb}
                       alt={item?.strMeal}
+                      onLoad={() => setLoading(false)}
                     />
                   </div>
                   <div className="flex justify-start items-start">

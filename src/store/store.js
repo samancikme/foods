@@ -5,7 +5,7 @@ export const initialState = {
   favFood: JSON.parse(localStorage.getItem("favourite")) || [],
   basketFood: JSON.parse(localStorage.getItem("basket")) || [],
   modalAlert: false,
-  mode: JSON.parse(localStorage.getItem("theme")) ?? true, 
+  mode: JSON.parse(localStorage.getItem("theme")) ?? false, 
   amount: JSON.parse(localStorage.getItem("amount")) ?? 0,
 };
 
