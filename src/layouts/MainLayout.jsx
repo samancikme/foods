@@ -12,19 +12,26 @@ const MainLayout = () => {
   const { state, dispatch } = useContext(MainContext)
 
 
-  useEffect(() => {
-  }, [])
-  localStorage.setItem('theme', true)
+  if (localStorage.getItem("theme")?.length <= 0) {
+    localStorage.setItem('theme', JSON.stringify(true))
+  }
 
 
+  console.log(localStorage.getItem("theme"))
+  console.log(state.mode)
+
+
+
   useEffect(() => {
-    const theme = localStorage.getItem('theme')
     if (state.mode) {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
     } else {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
     }
-  }, [state.mode])
+  }, [state.mode]);
+  
+
+
 
 
   return (

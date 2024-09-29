@@ -11,7 +11,7 @@ import { getAllData } from './api/request'
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const url = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Chicken'
+  const url = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood'
 
   useEffect(() => {
     getAllData(url, dispatch)
