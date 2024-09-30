@@ -84,17 +84,18 @@ const Basket = () => {
               >
                 <div className="flex justify-between items-center sm:flex-row flex-col gap-3">
                   <div className=" relative">
-                    {loading && (
-                      <div className="flex justify-center dark:text-white items-center h-[300px]">
+                    {loading ?
+                      <div className="flex justify-center dark:text-white items-center w-[150px] h-[150px]">
                         Loading...
                       </div>
-                    )}
-                    <img
-                      className="w-[150px] h-[150px] object-contain rounded-xl border-[1px] border-gray-400 shadow-md"
-                      src={item?.strMealThumb}
-                      alt={item?.strMeal}
-                      onLoad={() => setLoading(false)}
-                    />
+                      :
+                      <img
+                        className="w-[150px] h-[150px] object-contain rounded-xl border-[1px] border-gray-400 shadow-md"
+                        src={item?.strMealThumb}
+                        alt={item?.strMeal}
+                        onLoad={() => setLoading(false)}
+                      />
+                    }
                   </div>
                   <div className="flex justify-start items-start">
                     <h2 className="text-[16px] dark:text-white font-bold py-2">
